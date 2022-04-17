@@ -22,15 +22,24 @@ function Account() {
     return (
       <div className="connect-wal">
         <a>
-          <Button onClick={onOpen}>{'Connect Wallet'}</Button>
+          <Button 
+          onClick={onOpen}
+          borderRadius = '0px'
+          color={ '#fff'}
+          padding = { '25px'}
+          fontFamily= {'serif'}
+          backgroundColor={'#252a2b'}
+          >{'Connect Wallet'}
+          </Button>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalCloseButton />
+              <ModalHeader>Connect Wallet</ModalHeader>
               <ModalBody>
                 <Stack direction='row'>
                   {connectors.map(({ title, icon, connectorId }, key) => (
-                    <div
+                    <Box
                       key={key}
                       onClick={async () => {
                         try {
@@ -48,7 +57,7 @@ function Account() {
                         objectFit='cover'
                         src={icon} alt={title} />
                       <Text style={{ fontSize: '14px' }}>{title}</Text>
-                    </div>
+                    </Box>
                   ))}
                 </Stack>
 

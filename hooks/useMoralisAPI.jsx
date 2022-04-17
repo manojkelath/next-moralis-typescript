@@ -20,7 +20,7 @@ function useMoralisAPIProvider() {
   const [tokenIdOptions, setTokenIdOptions] = useState(null);
   const [tokenIds, setTokenIds] = useState(0);
   const { Moralis, account, enableWeb3, isAuthenticated, chainId, isWeb3Enabled, isWeb3EnableLoading } = useMoralis();
-  const { NFTBalance, isLoading, getNFTBalance: getNFTBalance } = useNFTBalance({ token_address: config[config.network].contract_oceedee, address: account }, true);
+  const { NFTBalance, isLoading, getNFTBalance } = useNFTBalance({ token_address: config[config.network].contract_oceedee, address: account }, true);
 
   const [isApproved, setIsApproved] = useState(false);
 
@@ -53,10 +53,6 @@ function useMoralisAPIProvider() {
     contractAddress: config[config.network].contract_css,
     functionName: 'isMintWithTknActive'
   });
-
-
-
-
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem('connectorId');

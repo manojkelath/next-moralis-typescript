@@ -22,11 +22,11 @@ import {
               </Text>
               <br />{' '}
               <Text color={'blue.400'} as={'span'}>
-                OceeDee NFTs
+              OCEEDEE Genesis NFT
               </Text>{' '}
             </Heading>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-              Get access to India's premium clothing collection!
+              Get access to India's premium shoe collection!
             </Text>
             <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
             <Select placeholder='Select Quantity'>

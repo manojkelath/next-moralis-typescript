@@ -1,10 +1,8 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { getEllipsisTxt } from "../helpers/formatters";
-import Blockie from "../Blockie";
-import "./identicon.css";
 import { useMoralis } from "react-moralis";
-import { Skeleton } from "antd";
+import Blockie from "../Blockie/Blockie";
 
 const styles = {
   address: {
@@ -28,7 +26,7 @@ function Address(props) {
 
   if (!address)
     return (
-      <Skeleton paragraph={{ rows: 1, width: "100%" }} title={false} active />
+      <div></div>
     );
 
   const Copy = () => (

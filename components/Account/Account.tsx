@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { getEllipsisTxt } from '../helpers/formatters';
 import { Box, Button, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import { useState } from 'react';
-// import Address from '../Address/Address';
+import Address from '../Address/Address';
 import { getExplorer } from '../helpers/networks';
 import { connectors } from './config';
+import Blockie from '../Blockie/Blockie';
 
 
 function Account() {
@@ -14,7 +15,6 @@ function Account() {
   const { switchNetwork } = useChain();
 
   const { t } = useTranslation();
-  const [isAuthModalVisible, setIsAuthModalVisible] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure()
 
 
@@ -36,7 +36,9 @@ function Account() {
                         try {
                           await authenticate({ signingMessage: "CSSC Autentication", provider: connectorId }); // TODO: mention type
                           window.localStorage.setItem('connectorId', connectorId);
-                          setIsAuthModalVisible(false);
+                          await onClose();
+
+                          // setIsAuthModalVisible(false);
                         } catch (e) {
                           console.error(e);
                         }
@@ -58,7 +60,56 @@ function Account() {
         </a>
       </div>
     );
+  } else {
+
+    return (
+      <div className="connect-wal" style={{ marginTop: "2px", marginLeft: "10px" }}>
+        <Button onClick={onOpen} >
+          <Blockie currentWallet scale={3} />
+          {getEllipsisTxt(account, 6)}
+        </Button>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalCloseButton />
+            <ModalBody>
+              {t('account')}
+              <Box>
+                <Address
+                  avatar="left"
+                  size={6}
+                  copyable
+                  style={{ fontSize: '20px' }}
+                />
+                <div style={{ marginTop: '10px', padding: '0 10px' }}>
+                  <a
+                    href={`${getExplorer(chainId)}/address/${account}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {t('view_on_explorer')}
+                  </a>
+                </div>
+              </Box>
+              <Button
+                onClick={async () => {
+                  await onClose();
+                  await logout();
+                  window.localStorage.removeItem('connectorId');
+                }}
+              >
+                {t('disconnect_wallet')}
+              </Button>
+
+            </ModalBody>
+
+
+          </ModalContent>
+        </Modal>
+      </div >
+    );
   }
+
 
 
 

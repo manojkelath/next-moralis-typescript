@@ -26,7 +26,7 @@ import {
               </Text>{' '}
             </Heading>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-              Get access to India's premium shoe collection!
+              Get special access to India's premium shoe collection!
             </Text>
             <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
             <Select placeholder='Select Quantity'>

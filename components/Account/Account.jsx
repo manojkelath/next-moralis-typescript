@@ -1,10 +1,10 @@
 import { useMoralis, useChain } from 'react-moralis';
 import { useTranslation } from 'react-i18next';
-import { getEllipsisTxt } from '../helpers/formatters';
+import { getEllipsisTxt } from '../Helpers/formatters';
 import { Box, Button, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import { useState } from 'react';
 import Address from '../Address/Address';
-import { getExplorer } from '../helpers/networks';
+import { getExplorer } from '../Helpers/networks';
 import { connectors } from './config';
 import Blockie from '../Blockie/Blockie';
 

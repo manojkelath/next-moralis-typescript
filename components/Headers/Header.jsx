@@ -14,6 +14,7 @@ import {
     useColorModeValue,
     useBreakpointValue,
     useDisclosure,
+    Image
 } from '@chakra-ui/react';
 import {
     HamburgerIcon,
@@ -21,7 +22,8 @@ import {
     ChevronDownIcon,
     ChevronRightIcon,
 } from '@chakra-ui/icons';
-import Account from './Account/Account';
+import Account from '../Account/Account';
+import Colors from '../Helpers/colors';
 
 export default function Header() {
     const { isOpen, onToggle } = useDisclosure();
@@ -29,7 +31,7 @@ export default function Header() {
     return (
         <Box>
             <Flex
-                bg={useColorModeValue('white', 'gray.800')}
+                bg={Colors.oceedee_orange}
                 color={useColorModeValue('gray.600', 'white')}
                 minH={'60px'}
                 py={{ base: 2 }}
@@ -52,12 +54,12 @@ export default function Header() {
                     />
                 </Flex>
                 <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-                    <Text
-                        textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
-                        fontFamily={'heading'}
-                        color={useColorModeValue('gray.800', 'white')}>
-                        Logo
-                    </Text>
+                <Stack direction='row'>
+                    <Image boxSize='145px'
+                        maxHeight='40px'
+                        src={'/Oceedee_logo.png'} alt={'oceedee logo'} />
+                </Stack>
+                
 
                     <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
                         <DesktopNav />
@@ -135,7 +137,7 @@ const DesktopNav = () => {
     );
 };
 
-const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
+const DesktopSubNav = ({ label, href, subLabel }) => {
     return (
         <Link
             href={href}
@@ -182,7 +184,7 @@ const MobileNav = () => {
     );
 };
 
-const MobileNavItem = ({ label, children, href }: NavItem) => {
+const MobileNavItem = ({ label, children, href }) => {
     const { isOpen, onToggle } = useDisclosure();
 
     return (
@@ -232,14 +234,8 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
     );
 };
 
-interface NavItem {
-    label: string;
-    subLabel?: string;
-    children?: Array<NavItem>;
-    href?: string;
-}
 
-const NAV_ITEMS: Array<NavItem> = [
+const NAV_ITEMS = [
     {
         label: 'Inspiration',
         children: [

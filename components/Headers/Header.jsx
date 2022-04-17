@@ -14,8 +14,9 @@ import {
     useColorModeValue,
     useBreakpointValue,
     useDisclosure,
-    Image
+    Image,
 } from '@chakra-ui/react';
+
 import {
     HamburgerIcon,
     CloseIcon,
@@ -71,14 +72,7 @@ export default function Header() {
                     justify={'flex-end'}
                     direction={'row'}
                     spacing={6}>
-                    <Button
-                        as={'a'}
-                        fontSize={'sm'}
-                        fontWeight={400}
-                        variant={'link'}
-                        href={'#'}>
-                        Sign In
-                    </Button>
+                    
                     <Account></Account>
                 </Stack>
             </Flex>
@@ -97,7 +91,7 @@ const DesktopNav = () => {
 
     return (
         <Stack direction={'row'} spacing={4}>
-            {NAV_ITEMS.map((navItem) => (
+            {/* {NAV_ITEMS.map((navItem) => (
                 <Box key={navItem.label}>
                     <Popover trigger={'hover'} placement={'bottom-start'}>
                         <PopoverTrigger>
@@ -132,7 +126,7 @@ const DesktopNav = () => {
                         )}
                     </Popover>
                 </Box>
-            ))}
+            ))} */}
         </Stack>
     );
 };
@@ -252,19 +246,7 @@ const NAV_ITEMS = [
         ],
     },
     {
-        label: 'Find Work',
-        children: [
-            {
-                label: 'Job Board',
-                subLabel: 'Find your dream design job',
-                href: '#',
-            },
-            {
-                label: 'Freelance Projects',
-                subLabel: 'An exclusive list for contract work',
-                href: '#',
-            },
-        ],
+        label: 'Find Work'
     },
     {
         label: 'Learn Design',

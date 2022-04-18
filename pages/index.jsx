@@ -3,7 +3,6 @@ import Header from "../components/Headers/Header";
 import Mint from "../components/Mint/Mint";
 
 export default function Home() {
-
   return (
     <div>
       <Head>

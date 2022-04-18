@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMoralisWeb3Api, useMoralisWeb3ApiCall, useMoralis } from "react-moralis";
-import config from "../config/config";
+import config from "../config";
 
 export const useNFTBalance = (options, isMalaMaal) => {
     const { account } = useMoralisWeb3Api();

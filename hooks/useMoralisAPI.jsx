@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import OCEEDEE_ABI from '../abi/abi_oceedee.json';
 import { useMoralis, useWeb3ExecuteFunction } from 'react-moralis';
-import config from '../config/config';
+import config from '../config';
 import { useNFTBalance } from './useNftBalance';
 
-const MoralisAPIContext = createContext();
+const MoralisAPIContext = React.createContext();
 
 export function MoralisAPIProvider({ children }) {
   const mixpanel = useMoralisAPIProvider();
@@ -32,7 +32,7 @@ function useMoralisAPIProvider() {
     isFetching: isFetchingMaalBal,
     isLoading: isLoadMaalBal,
   } = useWeb3ExecuteFunction({
-    abi: maalContractABI,
+    abi: OCEEDEE_ABI,
     contractAddress: config[config.network].contract_maal,
     functionName: 'balanceOf',
     params: {
@@ -69,30 +69,14 @@ function useMoralisAPIProvider() {
   }, [chainId]);
 
   useEffect(() => {
-    setOceedeeContractABI(CSS_ABI);
+    setOceedeeContractABI(OCEEDEE_ABI);
   }, [isWeb3Enabled, chainId, account]);
 
 
   useEffect(() => {
-    getTokensOfOwner();
+    // getTokensOfOwner();
   }, [account]);
 
-  useEffect(() => {
-    if (successTokensOfOwner) {
-      let options = [];
-      let tokenIds = [];
-      successTokensOfOwner.forEach((bigNumber) => {
-        const tokenId = Moralis.Units.FromWei(bigNumber, 0);
-        options.push({
-          value: tokenId,
-          label: tokenId,
-        });
-        tokenIds.push(tokenId);
-      });
-      setTokenIds(tokenIds);
-      setTokenIdOptions(options);
-    }
-  }, [successTokensOfOwner]);
 
   return {
     contractABI,
@@ -101,9 +85,8 @@ function useMoralisAPIProvider() {
       error: errMaalBal,
       isLoading: isLoadMaalBal,
       isFetching: isFetchingMaalBal,
-    },
-    getTokensOfOwner
-   
+    }
+
   };
 }
 

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import OCEEDEE_ABI from '../abi/abi_oceedee.json';
 import { useMoralis, useWeb3ExecuteFunction } from 'react-moralis';
 import config from '../config';
-import { useNFTBalance } from './useNftBalance';
 
 const MoralisAPIContext = React.createContext();
 
@@ -17,41 +16,49 @@ export function MoralisAPIProvider({ children }) {
 
 function useMoralisAPIProvider() {
   const [contractABI, setOceedeeContractABI] = useState(null); //Smart Contract ABI here
-  const [tokenIdOptions, setTokenIdOptions] = useState(null);
-  const [tokenIds, setTokenIds] = useState(0);
   const { Moralis, account, enableWeb3, isAuthenticated, chainId, isWeb3Enabled, isWeb3EnableLoading } = useMoralis();
-  const { NFTBalance, isLoading, getNFTBalance } = useNFTBalance({ token_address: config[config.network].contract_oceedee, address: account }, true);
-
-  const [isApproved, setIsApproved] = useState(false);
-
 
   const {
-    data: succMaalBal,
-    error: errMaalBal,
-    fetch: getMaalBalance,
-    isFetching: isFetchingMaalBal,
-    isLoading: isLoadMaalBal,
+    data: isActive,
+    fetch: getIsActive,
+    isLoading: isActiveLoading,
   } = useWeb3ExecuteFunction({
     abi: OCEEDEE_ABI,
-    contractAddress: config[config.network].contract_maal,
-    functionName: 'balanceOf',
-    params: {
-      account: account,
-    },
+    contractAddress: config[config.network].contract_oceedee,
+    functionName: 'isActive'
   });
 
-
-  // cSSC
   const {
-    data: isMintWithTknActive,
-    error: errIsMintWithTknActive,
-    fetch: checkIfMintWithTknActive,
-    isFetching: fetchingIsMintWithTknActive,
-    isLoading: loadingIsMintWithTknActive,
+    data: isPreMintActive,
+    isLoading: isPreMintActiveLoading,
   } = useWeb3ExecuteFunction({
-    abi: contractABI,
-    contractAddress: config[config.network].contract_css,
-    functionName: 'isMintWithTknActive'
+    abi: OCEEDEE_ABI,
+    contractAddress: config[config.network].contract_oceedee,
+    functionName: 'isPreMintActive'
+  });
+
+  const {
+    data: isWhitelisted,
+    isLoading: isWhitelistedLoading,
+  } = useWeb3ExecuteFunction({
+    abi: OCEEDEE_ABI,
+    contractAddress: config[config.network].contract_oceedee,
+    functionName: 'isWhitelisted',
+    params: {
+      user: account
+    }
+  });
+
+  const {
+    data: tokensOfOwner,
+    isLoading: tokensOfOwnerLoading,
+  } = useWeb3ExecuteFunction({
+    abi: OCEEDEE_ABI,
+    contractAddress: config[config.network].contract_oceedee,
+    functionName: 'tokensOfOwner',
+    params: {
+      _owner: account
+    }
   });
 
   useEffect(() => {
@@ -61,32 +68,33 @@ function useMoralisAPIProvider() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
 
-  useEffect(() => {
-    if (chainId) {
-      setIsBinanceNetwork(chainId === config[config.network].chainId);
-      setIsEthNetwork(chainId === config[config.network].chainIdEth);
-    }
-  }, [chainId]);
+
 
   useEffect(() => {
     setOceedeeContractABI(OCEEDEE_ABI);
   }, [isWeb3Enabled, chainId, account]);
 
-
   useEffect(() => {
-    // getTokensOfOwner();
-  }, [account]);
+    getIsActive();
+  }, [isWeb3Enabled, chainId, account]);
 
 
   return {
     contractABI,
-    balanceOf: {
-      data: succMaalBal,
-      error: errMaalBal,
-      isLoading: isLoadMaalBal,
-      isFetching: isFetchingMaalBal,
+    owner: {
+      tokensOfOwner,
+      tokensOfOwnerLoading
+    },
+    mintStatus: {
+      isActive,
+      isActiveLoading,
+      isPreMintActive,
+      isPreMintActiveLoading
+    },
+    whitelist: {
+      isWhitelisted,
+      isWhitelistedLoading
     }
-
   };
 }
 

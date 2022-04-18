@@ -22,13 +22,13 @@ function Account() {
     return (
       <div className="connect-wal">
         <a>
-          <Button 
-          onClick={onOpen}
-          borderRadius = '0px'
-          color={ '#fff'}
-          padding = { '25px'}
-          fontFamily= {'serif'}
-          backgroundColor={'#252a2b'}
+          <Button
+            onClick={onOpen}
+            borderRadius='0px'
+            color={'#fff'}
+            padding={'25px'}
+            fontFamily={'serif'}
+            backgroundColor={'#252a2b'}
           >{'Connect Wallet'}
           </Button>
           <Modal isOpen={isOpen} onClose={onClose}>
@@ -73,9 +73,15 @@ function Account() {
 
     return (
       <div className="connect-wal" style={{ marginTop: "2px", marginLeft: "10px" }}>
-        <Button onClick={onOpen} >
-          <Blockie currentWallet scale={3} />
-          {getEllipsisTxt(account, 6)}
+        <Button
+          borderRadius='0px'
+          color={'#fff'}
+          padding={'25px'}
+          fontFamily={'serif'}
+          backgroundColor={'#252a2b'}
+          onClick={onOpen} >
+          <Blockie currentWallet scale={2} />
+          <span style={{ padding: '8px' }}>{getEllipsisTxt(account, 6)}</span>
         </Button>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />

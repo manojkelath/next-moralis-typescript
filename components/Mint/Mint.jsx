@@ -14,26 +14,41 @@ import useMoralisAPI from '../../hooks/useMoralisAPI';
 import Account from '../Account/Account';
 
 export default function SplitScreen() {
-  const { isAuthenticated } = useMoralis();
-  const { mintStatus, whitelist } = useMoralisAPI();
+  const { isAuthenticated, Moralis } = useMoralis();
+  const { mint, premint, whitelist } = useMoralisAPI();
   const [isMintActive, setIsMintActive] = useState(false);
   const [isPreMintActive, setIsPreMintMintActive] = useState(false);
   const [isWhitelisted, setIsWhitelisted] = useState(false);
+  const [maxPremintPerAdd, setMaxPremintPerAdd] = useState(false);
+  const [optionsMaxPremint, setOptionMaxPremint] = useState([]);
 
   useEffect(() => {
-    if (!mintStatus.isActiveLoading) {
-      setIsMintActive(mintStatus.isActive);
+    if (!mint.isActiveLoading) {
+      setIsMintActive(mint.isActive);
     }
-    if (!mintStatus.isPreMintActiveLoading) {
-      setIsPreMintMintActive(mintStatus.isPreMintActive);
+    if (!premint.isPreMintActiveLoading) {
+      setIsPreMintMintActive(premint.isPreMintActive);
     }
-  }, [mintStatus.isActive, mintStatus.isPreMintActive]);
+    if (!premint.maxPreMintPerAddLoading && premint.maxPreMintPerAdd) {
+      const max = Moralis.Units.FromWei(premint.maxPreMintPerAdd, 0);
+      setMaxPremintPerAdd(Number(max));
+      getOptionsForPremint();
+    }
+  }, [mint.isActive, premint.isPreMintActive, premint.maxPremintPerAdd]);
 
   useEffect(() => {
     if (!whitelist.isWhitelistedLoading) {
       setIsWhitelisted(whitelist.isWhitelisted);
     }
   }, [whitelist.isWhitelisted]);
+
+  const getOptionsForPremint = () => {
+    let options = [];
+    for (let i = 0; i < maxPremintPerAdd; i++) {
+      options.push(i + 1);
+    }
+    setOptionMaxPremint(options);
+  }
 
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
@@ -83,16 +98,16 @@ export default function SplitScreen() {
                   position={'relative'}>
                   Congratulations!
                 </Text>
-                <br />{' '}
-                <Text fontSize={{ base: 'md', lg: 'lg' }} color={'blue.400'} as={'span'}>
-                  You are whitelisted for the premium mint.
+                <br /><br />{' '}
+                <Text fontSize={{ base: 'md', lg: 'lg' }} color={'blue.400'}>
+                  You are whitelisted for the presale and are eligible to mint {maxPremintPerAdd} NFTs.
                 </Text>{' '}
               </Heading>
               <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
                 <Select placeholder='Select Quantity'>
-                  <option value='option1'>1</option>
-                  <option value='option2'>2</option>
-                  <option value='option3'>3</option>
+                  {optionsMaxPremint.map((val, i) => {
+                    return <option value={i + 1} key={i}>{val}</option>
+                  })}
                 </Select>
                 <Button
                   borderRadius='0px'

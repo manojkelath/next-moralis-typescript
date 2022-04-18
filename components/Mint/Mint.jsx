@@ -15,7 +15,7 @@ import Account from '../Account/Account';
 
 export default function SplitScreen() {
   const { isAuthenticated, Moralis } = useMoralis();
-  const { mint, premint, whitelist } = useMoralisAPI();
+  const { mint, premint, whitelist, user } = useMoralisAPI();
   const [isMintActive, setIsMintActive] = useState(false);
   const [isPreMintActive, setIsPreMintMintActive] = useState(false);
   const [isWhitelisted, setIsWhitelisted] = useState(false);
@@ -23,6 +23,7 @@ export default function SplitScreen() {
   const [optionsMaxPremint, setOptionMaxPremint] = useState([]);
   const [optionsMaxMint, setOptionMaxMint] = useState([]);
   const [maxMintPerAdd, setMaxMintPerAdd] = useState(0);
+  const [isPresaleMaxed, setPresaleMaxed] = useState([]);
 
   useEffect(() => {
     if (!mint.isActiveLoading) {
@@ -48,6 +49,18 @@ export default function SplitScreen() {
       setIsWhitelisted(whitelist.isWhitelisted);
     }
   }, [whitelist.isWhitelisted]);
+
+  useEffect(() => {
+    if (user.tokenIds) {
+      let maxAvailableMinting = maxMintPerAdd - user.tokenIds.length;
+      let maxAvailablePreMinting = maxPremintPerAdd - user.tokenIds.length;
+      getOptionsForMint(maxAvailableMinting);
+      getOptionsForPremint(maxAvailablePreMinting);
+      if (maxAvailablePreMinting == 0) {
+        setPresaleMaxed(true);
+      }
+    }
+  }, [user, maxMintPerAdd, maxPremintPerAdd]);
 
   const getOptionsForPremint = (max) => {
     let options = [];
@@ -105,7 +118,7 @@ export default function SplitScreen() {
             </>
           }
           {
-            isAuthenticated && !isMintActive && isPreMintActive && isWhitelisted &&
+            isAuthenticated && !isMintActive && isPreMintActive && isWhitelisted && !isPresaleMaxed &&
             <>
               <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                 <Text
@@ -134,6 +147,22 @@ export default function SplitScreen() {
                   Mint
                 </Button>
               </Stack>
+            </>
+          }
+          {
+            isAuthenticated && !isMintActive && isPreMintActive && isWhitelisted && isPresaleMaxed &&
+            <>
+              <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
+                <Text
+                  as={'span'}
+                  position={'relative'}>
+                  Congratulations!
+                </Text>
+                <br /><br />{' '}
+                <Text fontSize={{ base: 'md', lg: 'lg' }} color={'blue.400'}>
+                  You are claimed all your presale NFTs. Please wait for the public sale.
+                </Text>{' '}
+              </Heading>
             </>
           }
           {

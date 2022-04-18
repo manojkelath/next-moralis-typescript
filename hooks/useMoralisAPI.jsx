@@ -17,7 +17,7 @@ export function MoralisAPIProvider({ children }) {
 function useMoralisAPIProvider() {
   const [contractABI, setOceedeeContractABI] = useState(null); //Smart Contract ABI here
   const { Moralis, account, enableWeb3, isAuthenticated, chainId, isWeb3Enabled, isWeb3EnableLoading } = useMoralis();
-
+  const [tokenIds, setTokenIds] = useState([]);
   const {
     data: isActive,
     fetch: getIsActive,
@@ -73,6 +73,7 @@ function useMoralisAPIProvider() {
 
   const {
     data: tokensOfOwner,
+    fetch: getTokensOfOwner,
     isLoading: tokensOfOwnerLoading,
   } = useWeb3ExecuteFunction({
     abi: OCEEDEE_ABI,
@@ -82,6 +83,15 @@ function useMoralisAPIProvider() {
       _owner: account
     }
   });
+
+  useEffect(() => {
+    let tokenIds = [];
+    tokensOfOwner?.forEach((bigNumber) => {
+      const tokenId = Moralis.Units.FromWei(bigNumber, 0);
+      tokenIds.push(tokenId);
+    });
+    setTokenIds(tokenIds);
+  }, [tokensOfOwner]);
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem('connectorId');
@@ -102,6 +112,7 @@ function useMoralisAPIProvider() {
     getIsWhitelisted();
     getMaxMintPerAdd();
     getMaxPreMintPerAdd();
+    getTokensOfOwner();
   }, [isWeb3Enabled, chainId, account]);
 
 
@@ -126,6 +137,9 @@ function useMoralisAPIProvider() {
     whitelist: {
       isWhitelisted,
       isWhitelistedLoading
+    },
+    user: {
+      tokenIds
     }
   };
 }

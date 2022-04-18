@@ -28,6 +28,7 @@ export default function Mint() {
   const [isMaxed, setMaxed] = useState([]);
   const [totalSupply, setTotalSupply] = useState(0);
   const [maxSupply, setMaxSupply] = useState(0);
+  const [tokenIds, setTokenIds] = useState([]);
 
   useEffect(() => {
     if (!mint.isActiveLoading) {
@@ -55,6 +56,7 @@ export default function Mint() {
   }, [whitelist.isWhitelisted]);
 
   useEffect(() => {
+    setTokenIds(user.tokenIds);
     let maxAvailableMinting = maxMintPerAdd - user.tokenIds.length;
     let maxAvailablePreMinting = maxPremintPerAdd - user.tokenIds.length;
     getOptionsForMint(maxAvailableMinting);
@@ -128,6 +130,27 @@ export default function Mint() {
                 minted
               </Text>  {' '}
               <Progress value={(totalSupply / maxSupply) * 100} />
+
+              <Text as={'span'}
+                fontSize={{ base: '3md', md: 'xl' }}
+                color={'blue.400'}>
+                Your token Ids: {' '}
+              </Text>
+              {
+                tokenIds.map((tokenId, i) => {
+                  return (
+                    <>
+                      <Text
+                        key={i}
+                        as={'span'}
+                        fontSize={{ md: 'xl' }}
+                        position={'relative'}>
+                        {tokenId}{i === tokenIds.length - 1 ? '' : ','}
+                      </Text>
+                    </>
+                  )
+                })
+              }
             </Heading>
           }
 
@@ -136,7 +159,6 @@ export default function Mint() {
             <>
               <Heading
                 fontFamily={'Futura Lt BT'}
-
                 fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                 <Text
                   as={'span'}

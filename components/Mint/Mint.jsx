@@ -97,7 +97,7 @@ export default function SplitScreen() {
                 <Button
                   borderRadius='0px'
                   color={'#fff'}
-                  padding={'25px'}
+                  padding={'18px'}
                   fontFamily={'serif'}
                   backgroundColor={'#252a2b'}
                 >
@@ -117,25 +117,9 @@ export default function SplitScreen() {
                 </Text>
                 <br />{' '}
                 <Text fontSize={{ base: 'md', lg: 'lg' }} color={'blue.400'} as={'span'}>
-                  You are not whitelisted for the premium mint.
+                  You are not whitelisted for the presale.
                 </Text>{' '}
               </Heading>
-              <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
-                <Select placeholder='Select Quantity'>
-                  <option value='option1'>1</option>
-                  <option value='option2'>2</option>
-                  <option value='option3'>3</option>
-                </Select>
-                <Button
-                  borderRadius='0px'
-                  color={'#fff'}
-                  padding={'25px'}
-                  fontFamily={'serif'}
-                  backgroundColor={'#252a2b'}
-                >
-                  Mint
-                </Button>
-              </Stack>
             </>
           }
           {

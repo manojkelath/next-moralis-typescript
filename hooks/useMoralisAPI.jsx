@@ -30,6 +30,7 @@ function useMoralisAPIProvider() {
 
   const {
     data: isPreMintActive,
+    fetch: getIsPreMintActive,
     isLoading: isPreMintActiveLoading,
   } = useWeb3ExecuteFunction({
     abi: OCEEDEE_ABI,
@@ -39,6 +40,7 @@ function useMoralisAPIProvider() {
 
   const {
     data: isWhitelisted,
+    fetch: getIsWhitelisted,
     isLoading: isWhitelistedLoading,
   } = useWeb3ExecuteFunction({
     abi: OCEEDEE_ABI,
@@ -76,6 +78,8 @@ function useMoralisAPIProvider() {
 
   useEffect(() => {
     getIsActive();
+    getIsPreMintActive();
+    getIsWhitelisted();
   }, [isWeb3Enabled, chainId, account]);
 
 

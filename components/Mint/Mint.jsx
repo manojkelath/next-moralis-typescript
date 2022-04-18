@@ -25,6 +25,7 @@ export default function Mint() {
   const [optionsMaxMint, setOptionMaxMint] = useState([]);
   const [maxMintPerAdd, setMaxMintPerAdd] = useState(0);
   const [isPresaleMaxed, setPresaleMaxed] = useState([]);
+  const [isMaxed, setMaxed] = useState([]);
   const [totalSupply, setTotalSupply] = useState(0);
   const [maxSupply, setMaxSupply] = useState(0);
 
@@ -54,16 +55,22 @@ export default function Mint() {
   }, [whitelist.isWhitelisted]);
 
   useEffect(() => {
-    if (user.tokenIds) {
-      let maxAvailableMinting = maxMintPerAdd - user.tokenIds.length;
-      let maxAvailablePreMinting = maxPremintPerAdd - user.tokenIds.length;
-      getOptionsForMint(maxAvailableMinting);
-      getOptionsForPremint(maxAvailablePreMinting);
-      if (maxAvailablePreMinting == 0) {
-        setPresaleMaxed(true);
-      }
+    let maxAvailableMinting = maxMintPerAdd - user.tokenIds.length;
+    let maxAvailablePreMinting = maxPremintPerAdd - user.tokenIds.length;
+    getOptionsForMint(maxAvailableMinting);
+    getOptionsForPremint(maxAvailablePreMinting);
+    if (maxAvailablePreMinting == 0) {
+      setPresaleMaxed(true);
+    } else {
+      setPresaleMaxed(false);
     }
-  }, [user, maxMintPerAdd, maxPremintPerAdd]);
+
+    if (maxAvailableMinting == 0) {
+      setMaxed(true);
+    } else {
+      setMaxed(false);
+    }
+  }, [user.tokenIds, maxMintPerAdd, maxPremintPerAdd]);
 
   useEffect(() => {
     if (supply.maxSupply) {
@@ -125,7 +132,7 @@ export default function Mint() {
           }
 
           {
-            isAuthenticated && isMintActive &&
+            isAuthenticated && isMintActive && !isMaxed &&
             <>
               <Heading
                 fontFamily={'Futura Lt BT'}
@@ -146,6 +153,7 @@ export default function Mint() {
                 fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
                 Get special access to India's premium shoe collection!
               </Text>
+
               <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
                 <Select placeholder='Select Quantity'>
                   {optionsMaxMint.map((val, i) => {
@@ -165,9 +173,30 @@ export default function Mint() {
             </>
           }
           {
+            isAuthenticated && isMintActive && isMaxed &&
+            <Heading
+              fontFamily={'Futura Lt BT'}
+              fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
+              <Text
+                as={'span'}
+                position={'relative'}>
+                Congratulations!
+              </Text>
+              <br />{' '}
+              <Text
+                fontFamily={'Futura Lt BT'}
+                fontSize={{ base: 'md', lg: 'lg' }} color={'blue.400'}>
+                You have claimed all your NFTs. Please wait for reveal.
+              </Text>{' '}
+            </Heading>
+          }
+          {
             isAuthenticated && !isMintActive && isPreMintActive && isWhitelisted && !isPresaleMaxed &&
             <>
-              <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
+              <Heading
+                fontFamily={'Futura Lt BT'}
+
+                fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                 <Text
                   as={'span'}
                   position={'relative'}>
@@ -179,7 +208,8 @@ export default function Mint() {
                 </Text>{' '}
               </Heading>
               <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
-                <Select placeholder='Select Quantity'>
+                <Select fontFamily={'Futura Lt BT'}
+                  placeholder='Select Quantity'>
                   {optionsMaxPremint.map((val, i) => {
                     return <option value={i + 1} key={i}>{val}</option>
                   })}
@@ -188,7 +218,7 @@ export default function Mint() {
                   borderRadius='0px'
                   color={'#fff'}
                   padding={'18px'}
-                  fontFamily={'serif'}
+                  fontFamily={'Futura Lt BT'}
                   backgroundColor={'#252a2b'}
                 >
                   Mint

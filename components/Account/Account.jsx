@@ -23,11 +23,11 @@ function Account() {
       <div className="connect-wal">
         <a>
           <Button
+            fontFamily={'Futura Lt BT'}
             onClick={onOpen}
             borderRadius='0px'
             color={'#fff'}
             padding={'25px'}
-            fontFamily={'serif'}
             backgroundColor={'#252a2b'}
           >{'Connect Wallet'}
           </Button>
@@ -107,13 +107,14 @@ function Account() {
                 </div>
               </Box>
               <Button
+                fontFamily={'Futura Lt BT'}
                 onClick={async () => {
                   await onClose();
                   await logout();
                   window.localStorage.removeItem('connectorId');
                 }}
               >
-                {t('disconnect_wallet')}
+                {'Disconnect'}
               </Button>
 
             </ModalBody>

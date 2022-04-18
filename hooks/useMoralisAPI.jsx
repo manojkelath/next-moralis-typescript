@@ -72,6 +72,26 @@ function useMoralisAPIProvider() {
   });
 
   const {
+    data: maxSupply,
+    fetch: getMaxSupply,
+    isLoading: maxSupplyLoading,
+  } = useWeb3ExecuteFunction({
+    abi: OCEEDEE_ABI,
+    contractAddress: config[config.network].contract_oceedee,
+    functionName: 'MAX_SUPPLY'
+  });
+
+  const {
+    data: totalSupply,
+    fetch: getTotalSupply,
+    isLoading: totalSupplyLoading,
+  } = useWeb3ExecuteFunction({
+    abi: OCEEDEE_ABI,
+    contractAddress: config[config.network].contract_oceedee,
+    functionName: 'totalSupply'
+  });
+
+  const {
     data: tokensOfOwner,
     fetch: getTokensOfOwner,
     isLoading: tokensOfOwnerLoading,
@@ -113,6 +133,8 @@ function useMoralisAPIProvider() {
     getMaxMintPerAdd();
     getMaxPreMintPerAdd();
     getTokensOfOwner();
+    getMaxSupply();
+    getTotalSupply();
   }, [isWeb3Enabled, chainId, account]);
 
 
@@ -140,6 +162,12 @@ function useMoralisAPIProvider() {
     },
     user: {
       tokenIds
+    },
+    supply: {
+      maxSupply,
+      maxSupplyLoading,
+      totalSupply,
+      totalSupplyLoading
     }
   };
 }

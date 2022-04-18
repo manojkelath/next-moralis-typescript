@@ -74,10 +74,10 @@ function Account() {
     return (
       <div className="connect-wal" style={{ marginTop: "2px", marginLeft: "10px" }}>
         <Button
+          fontFamily={'Futura Lt BT'}
           borderRadius='0px'
           color={'#fff'}
           padding={'25px'}
-          fontFamily={'serif'}
           backgroundColor={'#252a2b'}
           onClick={onOpen} >
           <Blockie currentWallet scale={2} />

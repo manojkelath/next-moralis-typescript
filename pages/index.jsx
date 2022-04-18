@@ -17,5 +17,6 @@ export default function Home() {
       <Header></Header>
       <Mint></Mint>
     </div>
+
   )
 }

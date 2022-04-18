@@ -19,8 +19,10 @@ export default function SplitScreen() {
   const [isMintActive, setIsMintActive] = useState(false);
   const [isPreMintActive, setIsPreMintMintActive] = useState(false);
   const [isWhitelisted, setIsWhitelisted] = useState(false);
-  const [maxPremintPerAdd, setMaxPremintPerAdd] = useState(false);
+  const [maxPremintPerAdd, setMaxPremintPerAdd] = useState(0);
   const [optionsMaxPremint, setOptionMaxPremint] = useState([]);
+  const [optionsMaxMint, setOptionMaxMint] = useState([]);
+  const [maxMintPerAdd, setMaxMintPerAdd] = useState(0);
 
   useEffect(() => {
     if (!mint.isActiveLoading) {
@@ -32,9 +34,14 @@ export default function SplitScreen() {
     if (!premint.maxPreMintPerAddLoading && premint.maxPreMintPerAdd) {
       const max = Moralis.Units.FromWei(premint.maxPreMintPerAdd, 0);
       setMaxPremintPerAdd(Number(max));
-      getOptionsForPremint();
+      getOptionsForPremint(Number(max));
     }
-  }, [mint.isActive, premint.isPreMintActive, premint.maxPremintPerAdd]);
+    if (!mint.maxMintPerAddLoading && mint.maxMintPerAdd) {
+      const max = Moralis.Units.FromWei(mint.maxMintPerAdd, 0);
+      setMaxMintPerAdd(Number(max));
+      getOptionsForMint(Number(max));
+    }
+  }, [mint.isActive, premint.isPreMintActive, mint.maxMintPerAdd, premint.maxPremintPerAdd]);
 
   useEffect(() => {
     if (!whitelist.isWhitelistedLoading) {
@@ -42,12 +49,20 @@ export default function SplitScreen() {
     }
   }, [whitelist.isWhitelisted]);
 
-  const getOptionsForPremint = () => {
+  const getOptionsForPremint = (max) => {
     let options = [];
-    for (let i = 0; i < maxPremintPerAdd; i++) {
+    for (let i = 0; i < max; i++) {
       options.push(i + 1);
     }
     setOptionMaxPremint(options);
+  }
+
+  const getOptionsForMint = (max) => {
+    let options = [];
+    for (let i = 0; i < max; i++) {
+      options.push(i + 1);
+    }
+    setOptionMaxMint(options);
   }
 
   return (
@@ -55,7 +70,7 @@ export default function SplitScreen() {
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={6} w={'full'} maxW={'lg'}>
           {
-            isAuthenticated && isMintActive && !isPreMintActive &&
+            isAuthenticated && isMintActive &&
             <>
               <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                 <Text
@@ -73,9 +88,9 @@ export default function SplitScreen() {
               </Text>
               <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
                 <Select placeholder='Select Quantity'>
-                  <option value='option1'>1</option>
-                  <option value='option2'>2</option>
-                  <option value='option3'>3</option>
+                  {optionsMaxMint.map((val, i) => {
+                    return <option value={i + 1} key={i}>{val}</option>
+                  })}
                 </Select>
                 <Button
                   borderRadius='0px'
@@ -90,7 +105,7 @@ export default function SplitScreen() {
             </>
           }
           {
-            isAuthenticated && isPreMintActive && isWhitelisted &&
+            isAuthenticated && !isMintActive && isPreMintActive && isWhitelisted &&
             <>
               <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                 <Text

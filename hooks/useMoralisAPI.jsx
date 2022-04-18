@@ -62,6 +62,16 @@ function useMoralisAPIProvider() {
   });
 
   const {
+    data: maxMintPerAdd,
+    fetch: getMaxMintPerAdd,
+    isLoading: maxMintPerAddLoading,
+  } = useWeb3ExecuteFunction({
+    abi: OCEEDEE_ABI,
+    contractAddress: config[config.network].contract_oceedee,
+    functionName: 'MAX_PER_ADDRESS'
+  });
+
+  const {
     data: tokensOfOwner,
     isLoading: tokensOfOwnerLoading,
   } = useWeb3ExecuteFunction({
@@ -90,6 +100,7 @@ function useMoralisAPIProvider() {
     getIsActive();
     getIsPreMintActive();
     getIsWhitelisted();
+    getMaxMintPerAdd();
     getMaxPreMintPerAdd();
   }, [isWeb3Enabled, chainId, account]);
 
@@ -108,7 +119,9 @@ function useMoralisAPIProvider() {
     },
     mint: {
       isActive,
-      isActiveLoading
+      isActiveLoading,
+      maxMintPerAdd,
+      maxMintPerAddLoading
     },
     whitelist: {
       isWhitelisted,
